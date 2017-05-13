@@ -5,19 +5,14 @@ list.files("power", full.names = TRUE)
 
 data <- read.table("power/household_power_consumption.txt", sep=";",header=TRUE)
 head(data)
+for(i in 3:9){
+    data[,i] <- as.numeric(as.character(data[,i]))
+}
+
 data2 <- data[which(data$Date %in% c("1/2/2007", "2/2/2007")),]
 head(data2)
-
-data2$Date <- as.Date(as.character(data2$Date), format = "%d/%m/%Y")
-data2$Time <- strptime(as.character(data$Time), format = "%H:%M:%S")
-
-data2 <- data[which(data$Date %in% c("2007-02-01", "2007-02-02")),]
-head(data2)
-
-data2$Date <- as.Date(as.character(data2$Date), format="%d/%m/%Y")
-data2$Time <- strptime(as.character(data2$Time), format = "%H:%M:%S")
-data2$Global_active_power <- as.numeric(data2$Global_active_power)
-head(data2)
+data2$Date_Time <- paste(data2$Date, data2$Time)
+data2$Date_Time <- strptime(data2$Date_Time, format = "%d/%m/%Y %H:%M:%S")
 
 #Plot 1
 hist(data2$Global_active_power / 500, col="red", main="Global Active Power",
